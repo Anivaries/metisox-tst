@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css"
+    rel="stylesheet"
+    />
+    <link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+</head>
+<body>
+    <div class="container p-5">
+        <label for="qSelect" name="question">Select a question:</label>
+        <select name="question" id="qSelect">
+            <option value="q1_notable">How many unique gene/copy-number values are in the file?</option>
+            <option value="q2_table">Compute the mean and standard deviation of copy number for all unique human gene products/proteins</option>
+            <option value="q3_table">Calculate the percentile rank (in terms of copy number ranks) for each gene product/protein</option>
+        </select>
+        <button id="btn">Calculate</button>
+        <!--Show/hide Data with button clicks-->
+        <script>
+            const btn = document.getElementById('btn');
+            btn.addEventListener('click', () => {
+              const div = document.getElementById('hide_data');
+              if (div.style.visibility === 'visible') {
+                div.style.visibility = 'hidden';
+              }
+              else {
+                div.style.visibility = 'visible';
+              }
+            });
+        </script>
+    </div>
+    <div class="container p-5">
+        <div id="hide_data" style="visibility: hidden;">
+            
+            <div id="q1_notable">
+                <p1>Gene: {{unique_values_g}}</p1><br>
+                <p1>Copy-number: {{unique_values_c}}</p1>
+            </div>
+            <div id="q3_table" style="display: none;">
+                <table id="metisoxTable_q3" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            {% comment %} <th>#Taxid</th>
+                            <th>Ensembl_protein</th> {% endcomment %}
+                            <th>Gn</th>
+                            <th>Mean-copy-number</th>
+                            <th>Percentile Rank</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="q2_table" style="display: none;">
+                <table id="metisoxTable_q2" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>GN</th>
+                            <th>Mean</th>
+                            <th>Standard Deviation</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js"></script>
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"
+></script>
+<script>
+    $(document).ready(function() {
+        //dataTable renders
+        $('#metisoxTable_q3').DataTable( {
+            ajax: {
+                // django view 
+                url: "{% url 'ajax_a3'%}",
+                dataSrc: "out_a3",
+                processing: true,
+                serverSide: true
+            },
+            "columns": [
+                //{ "data": 0 },
+                //{ "data": 1 },
+                { "data": 2 },
+                { "data": 3 },
+                { "data": 'percent_rank' },
+                
+            ],
+            //used to test ajax calls
+            success: function(response){
+                console.log("success");
+                },
+        } );
+        //dataTable renders
+        $('#metisoxTable_q2').DataTable( {
+            "ajax": {
+                // django view 
+                "url": "{% url 'ajax_a2'%}",
+                "dataSrc": "out_a2",
+                
+            },
+            "columns": [
+                { "data": "(2, '')" },
+                { "data": "(3, 'mean')"},
+                { "data": "(3, 'std')" },
+                
+            ],
+            //used to test ajax calls
+            success: function(response){
+                console.log("success");
+                },
+        } );
+        // Hides data when dropdown item changes. 
+        // Without this the data will be displayed every time dropdown item changes
+        // 
+        $('#qSelect').on('change',function(){
+            {
+                const div = document.getElementById('hide_data');
+                if (div.style.visibility === 'visible') {
+                    div.style.visibility = 'hidden';
+                }
+                else {
+                    div.style.visibility = 'hidden';
+                }
+              }
+            let div = $(this).val()
+            $('#hide_data>div').fadeOut(10,function(){
+                $('#'+div).show()
+            })
+        })
+    } );
+</script>
+</body>
+</html>

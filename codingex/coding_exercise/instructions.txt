@@ -1,0 +1,32 @@
+Write a simple web app (e.g. via Flask/Django) to display data and questions/results as a single HTML page.
+For each question listed below (A1,A2,A2,B1,B2) display the question together with a "calculate" button.
+On each calculate click display the corresponding answer to the question. The answer should appear below each question.
+The answer should be displayed as text (single numerical value) or the table (depending on the type of result required)
+All calculations required to answer the questions should be performed on the server (ideally using Python).
+Displaying answers should not require page reloading (you may use AJAX or Fetch to API to get answers from the server and
+JavaScript to modify the HTML DOM in place).
+
+Questions to answer:
+
+A. The file "9606_abund.txt" gives, for each human gene product/protein (Gn column), mean copy numbers.
+A1. How many unique gene/copy-number values are in the file? (Single numerical value)
+A2. Compute the mean and standard deviation of copy number for all unique human gene products/proteins (Table)
+A3. Calculate the percentile rank (in terms of copy number ranks) for each gene product/protein.
+(i.e. for Gene X, where is it in the ranks from top (0%) to bottom (100%) in terms of abundance) (Table)
+
+B. Using additionally the file "9606_gn_domains.txt" (combine data from both files). This file gives, for each
+human gene product/protein (Gn column) each domain (Domain column) that is present inside it.
+B1. What is the domain with the highest average abundance (i.e. across all copies of the domain in all gene
+products/proteins)?  (single numerical value)
+B2. Compute the mean and standard deviation of domain average abundance for each protein (they have the
+same labels as genes) domain by combining these two files also, compute the percentile rank values as above
+(Two tables)
+
+Upload data files and code to the public GitHub repository - check-in data files and code together with
+instructions on how to run it (README) and notify us sending short email with GitHub
+repo link to: tomasz.ignasiak@camcellnet.com
+
+It is not mandatory to answer/complete all queries.  Note that part B presumes some knowledge of molecular
+biology/bioinformatics.
+
+Contact tomasz.ignasiak@camcellnet.com in case of questions
