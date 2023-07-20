@@ -18,8 +18,28 @@ def read_file(request):
         'unique_values_g':unique_values_gene,
     }
     return render(request, 'index.html', context)
+    
 
-def ajax_a3(request):
+def data_a_two(request): 
+
+    file_path = os.path.join(BASE_DIR, r'codingex/coding_exercise/9606_abund.txt')
+    df = pd.read_csv(file_path, sep='\t', header=None)
+
+        # -2 and sort_values to remove >#Taxid Ensembl_protein Gn Mean-copy-number< *and* >#Taxid Paxid GN Mean<
+    mean_std_raw = pd.DataFrame(df, columns=[2, 3]).sort_values(by=3)[:-2]
+
+        # Convert 3rd column ( Mean-copy-number ) to float 
+    mean_std_raw = mean_std_raw.astype({2:'string', 3:'float64'})
+
+        # Create two new columns "mean" and "standard deviation", reset_index to save gene names
+    mean_std_sorted = mean_std_raw.groupby(2).agg(["mean", "std"]).reset_index()
+
+        # Convert and display as json 
+    out_2 = mean_std_sorted.to_json(orient='records')
+    ajax_json_a2 = json.loads(out_2)
+    return JsonResponse({'out_a2':ajax_json_a2})
+
+def data_a_three(request):
 
     file_path = os.path.join(BASE_DIR, r'codingex/coding_exercise/9606_abund.txt')
     df = pd.read_csv(file_path, sep='\t', header=None)
@@ -38,23 +58,3 @@ def ajax_a3(request):
 
         # -2 to remove >#Taxid Ensembl_protein Gn Mean-copy-number< *and* >#Taxid Paxid GN Mean<
     return JsonResponse({'out_a3':ajax_json_a3[:-2]})
-    
-
-def ajax_a2(request): 
-
-    file_path = os.path.join(BASE_DIR, r'codingex/coding_exercise/9606_abund.txt')
-    df = pd.read_csv(file_path, sep='\t', header=None)
-
-        # -2 and sort_values to remove >#Taxid Ensembl_protein Gn Mean-copy-number< *and* >#Taxid Paxid GN Mean<
-    mean_std_raw = pd.DataFrame(df, columns=[2, 3]).sort_values(by=3)[:-2]
-
-        # Convert 3rd column ( Mean-copy-number ) to float 
-    mean_std_raw = mean_std_raw.astype({2:'string', 3:'float64'})
-
-        # Create two new columns "mean" and "standard deviation", reset_index to save gene names
-    mean_std_sorted = mean_std_raw.groupby(2).agg(["mean", "std"]).reset_index()
-
-        # Convert and display as json 
-    out_2 = mean_std_sorted.to_json(orient='records')
-    ajax_json_a2 = json.loads(out_2)
-    return JsonResponse({'out_a2':ajax_json_a2})

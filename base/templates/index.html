@@ -16,49 +16,44 @@
 </head>
 <body>
     <div class="container p-5">
-        <label for="qSelect" name="question">Select a question:</label>
-        <select name="question" id="qSelect">
-            <option value="q1_notable">How many unique gene/copy-number values are in the file?</option>
-            <option value="q2_table">Compute the mean and standard deviation of copy number for all unique human gene products/proteins</option>
-            <option value="q3_table">Calculate the percentile rank (in terms of copy number ranks) for each gene product/protein</option>
-        </select>
-        <button id="btn">Calculate</button>
-        <!--Show/hide Data with button clicks-->
+        <div>
+            <span id="question">How many unique gene/copy-number values are in the file? <button id="btn_one">Calculate</button></span>
+        </div>
         <script>
-            const btn = document.getElementById('btn');
+            const btn = document.getElementById('btn_one');
             btn.addEventListener('click', () => {
-              const div = document.getElementById('hide_data');
-              if (div.style.visibility === 'visible') {
-                div.style.visibility = 'hidden';
+              const div = document.getElementById('answer_one');
+              if (div.style.display === 'none') {
+                div.style.display = 'inline';
               }
               else {
-                div.style.visibility = 'visible';
+                div.style.display = 'none';
               }
             });
         </script>
-    </div>
-    <div class="container p-5">
-        <div id="hide_data" style="visibility: hidden;">
-            
-            <div id="q1_notable">
-                <p1>Gene: {{unique_values_g}}</p1><br>
-                <p1>Copy-number: {{unique_values_c}}</p1>
+            <div id="answer_one" style="display:none;">
+                <div id="q1_notable">
+                    <p1>Gene: {{unique_values_g}}</p1><br>
+                    <p1>Copy-number: {{unique_values_c}}</p1>
+                </div><br>
             </div>
-            <div id="q3_table" style="display: none;">
-                <table id="metisoxTable_q3" class="display" style="width:100%">
-                    <thead>
-                        <tr>
-                            {% comment %} <th>#Taxid</th>
-                            <th>Ensembl_protein</th> {% endcomment %}
-                            <th>Gn</th>
-                            <th>Mean-copy-number</th>
-                            <th>Percentile Rank</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-            <div id="q2_table" style="display: none;">
-                <table id="metisoxTable_q2" class="display" style="width:100%">
+        <div>
+            <span id="question">Compute the mean and standard deviation of copy number for all unique human gene products/proteins <button id="btn_two">Calculate</button></span>
+        </div>
+        <script>
+            const btn_two = document.getElementById('btn_two');
+            btn_two.addEventListener('click', () => {
+              const div = document.getElementById('answer_two');
+              if (div.style.display === 'none') {
+                div.style.display = 'inline';
+              }
+              else {
+                div.style.display = 'none';
+              }
+            });
+        </script>
+            <div id="answer_two" style="display: none; margin-top:15px;">
+                <table id="dataTable_q2" class="display" style="width:100%">
                     <thead>
                         <tr>
                             <th>GN</th>
@@ -68,6 +63,33 @@
                     </thead>
                 </table>
             </div>
+        <div>
+            <span id="question">Calculate the percentile rank (in terms of copy number ranks) for each gene product/protein <button id="btn_three">Calculate</button></span>
+        </div>
+        <script>
+            const btn_three = document.getElementById('btn_three');
+            btn_three.addEventListener('click', () => {
+              const div = document.getElementById('answer_three');
+              if (div.style.display === 'none') {
+                div.style.display = 'inline';
+              }
+              else {
+                div.style.display = 'none';
+              }
+            });
+        </script>
+        <div id="answer_three" style="display: none;">
+            <table id="dataTable_q3" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        {% comment %} <th>#Taxid</th>
+                        <th>Ensembl_protein</th> {% endcomment %}
+                        <th>Gn</th>
+                        <th>Mean-copy-number</th>
+                        <th>Percentile Rank</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
@@ -79,10 +101,10 @@
 <script>
     $(document).ready(function() {
         //dataTable renders
-        $('#metisoxTable_q3').DataTable( {
+        $('#dataTable_q3').DataTable( {
             ajax: {
                 // django view 
-                url: "{% url 'ajax_a3'%}",
+                url: "{% url 'data_a_three'%}",
                 dataSrc: "out_a3",
                 processing: true,
                 serverSide: true
@@ -93,18 +115,13 @@
                 { "data": 2 },
                 { "data": 3 },
                 { "data": 'percent_rank' },
-                
-            ],
-            //used to test ajax calls
-            success: function(response){
-                console.log("success");
-                },
-        } );
+                ],
+        });
         //dataTable renders
-        $('#metisoxTable_q2').DataTable( {
+        $('#dataTable_q2').DataTable( {
             "ajax": {
                 // django view 
-                "url": "{% url 'ajax_a2'%}",
+                "url": "{% url 'data_a_two'%}",
                 "dataSrc": "out_a2",
                 
             },
@@ -112,31 +129,8 @@
                 { "data": "(2, '')" },
                 { "data": "(3, 'mean')"},
                 { "data": "(3, 'std')" },
-                
-            ],
-            //used to test ajax calls
-            success: function(response){
-                console.log("success");
-                },
+                ],
         } );
-        // Hides data when dropdown item changes. 
-        // Without this the data will be displayed every time dropdown item changes
-        // 
-        $('#qSelect').on('change',function(){
-            {
-                const div = document.getElementById('hide_data');
-                if (div.style.visibility === 'visible') {
-                    div.style.visibility = 'hidden';
-                }
-                else {
-                    div.style.visibility = 'hidden';
-                }
-              }
-            let div = $(this).val()
-            $('#hide_data>div').fadeOut(10,function(){
-                $('#'+div).show()
-            })
-        })
     } );
 </script>
 </body>

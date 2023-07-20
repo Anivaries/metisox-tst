@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import read_file, ajax_a2, ajax_a3
+from .views import read_file, data_a_two, data_a_three
 urlpatterns = [
     path('', read_file, name="index"),
-    path('data_a2/', ajax_a2, name="ajax_a2"),
-    path('data_a3/', ajax_a3, name="ajax_a3"),
+    path('data_a_two/', data_a_two, name="data_a_two"),
+    path('data_a_three/', data_a_three, name="data_a_three"),
 ]
