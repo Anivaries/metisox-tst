@@ -5,7 +5,7 @@ import os
 import pandas as pd
 import json 
 
-def read_file(request):
+def get_unique_values(request):
     file_path_1 = os.path.join(BASE_DIR, r'codingex/coding_exercise/9606_abund.txt')
     df_1 = pd.read_csv(file_path_1, sep='\t', header=None)
 
@@ -20,7 +20,7 @@ def read_file(request):
     return render(request, 'index.html', context)
     
 
-def data_a_two(request): 
+def get_mean_std(request): 
 
     file_path = os.path.join(BASE_DIR, r'codingex/coding_exercise/9606_abund.txt')
     df = pd.read_csv(file_path, sep='\t', header=None)
@@ -39,7 +39,7 @@ def data_a_two(request):
     ajax_json_a2 = json.loads(out_2)
     return JsonResponse({'out_a2':ajax_json_a2})
 
-def data_a_three(request):
+def get_percentile_rank(request):
 
     file_path = os.path.join(BASE_DIR, r'codingex/coding_exercise/9606_abund.txt')
     df = pd.read_csv(file_path, sep='\t', header=None)

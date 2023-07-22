@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import read_file, data_a_two, data_a_three
+from .views import get_unique_values, get_mean_std, get_percentile_rank
 urlpatterns = [
-    path('', read_file, name="index"),
-    path('data_a_two/', data_a_two, name="data_a_two"),
-    path('data_a_three/', data_a_three, name="data_a_three"),
+    path('', get_unique_values, name="unique_values"),
+    path('data_a_two/', get_mean_std, name="mean_std"),
+    path('data_a_three/', get_percentile_rank, name="percentile_rank"),
 ]

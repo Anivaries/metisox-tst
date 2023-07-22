@@ -104,7 +104,7 @@
         $('#dataTable_q3').DataTable( {
             ajax: {
                 // django view 
-                url: "{% url 'data_a_three'%}",
+                url: "{% url 'percentile_rank'%}",
                 dataSrc: "out_a3",
                 processing: true,
                 serverSide: true
@@ -121,7 +121,7 @@
         $('#dataTable_q2').DataTable( {
             "ajax": {
                 // django view 
-                "url": "{% url 'data_a_two'%}",
+                "url": "{% url 'mean_std'%}",
                 "dataSrc": "out_a2",
                 
             },

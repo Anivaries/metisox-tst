@@ -1,4 +1,4 @@
-# metisox-tst
+# coding exercise
 
 Created a simple html page which shows various data from _.txt_ files. 
 Packages used: 
