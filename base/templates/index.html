@@ -33,8 +33,7 @@
         </script>
             <div id="answer_one" style="display:none;">
                 <div id="q1_notable">
-                    <p1>Gene: {{unique_values_g}}</p1><br>
-                    <p1>Copy-number: {{unique_values_c}}</p1>
+                    <p1>Unique gene/copy-number rows: {{unique_values}}</p1>
                 </div><br>
             </div>
         <div>
@@ -82,8 +81,8 @@
             <table id="dataTable_q3" class="display" style="width:100%">
                 <thead>
                     <tr>
-                        {% comment %} <th>#Taxid</th>
-                        <th>Ensembl_protein</th> {% endcomment %}
+                        {% comment %} <th>#Taxid</th> {% endcomment %}
+                        <th>Ensembl_protein</th>
                         <th>Gn</th>
                         <th>Mean-copy-number</th>
                         <th>Percentile Rank</th>
@@ -91,6 +90,27 @@
                 </thead>
             </table>
         </div>
+        <div>
+            <span id="question">What is the domain with the highest average abundance? <button id="btn_four">Calculate</button></span>
+        </div>
+        <script>
+            const btn_four = document.getElementById('btn_four');
+            btn_four.addEventListener('click', () => {
+              const div = document.getElementById('answer_four');
+              if (div.style.display === 'none') {
+                div.style.display = 'inline';
+              }
+              else {
+                div.style.display = 'none';
+              }
+            });
+        </script>
+        <div id="answer_four" style="display:none;">
+            <div id="q4_notable">
+                <p1>Domain with the highest average occurrence is {{highest_average_domain}} with an average occurence of {{highest_average_occurrence}}</p1>
+            </div><br>
+        </div>
+    </div>
     </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js"></script>
@@ -111,10 +131,10 @@
             },
             "columns": [
                 //{ "data": 0 },
-                //{ "data": 1 },
+                { "data": 1 },
                 { "data": 2 },
                 { "data": 3 },
-                { "data": 'percent_rank' },
+                { "data": 'percentile' },
                 ],
         });
         //dataTable renders
